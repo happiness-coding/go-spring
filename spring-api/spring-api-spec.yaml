@@ -1,0 +1,1245 @@
+openapi: 3.0.3
+info:
+  title: Personal Blog API
+  description: API for nvbinhsoft's personal blog platform similar to Substack
+  version: 1.0.0
+  contact:
+    name: Nguyen Van Binh
+    email: nvbinhsoft@example.com
+
+servers:
+  - url: https://api.blog.nvbinhsoft.com/v1
+    description: Production server
+  - url: http://localhost:8080/api/v1
+    description: Development server
+
+tags:
+  - name: Authentication
+    description: User authentication endpoints
+  - name: Articles
+    description: Article management endpoints
+  - name: Categories
+    description: Category management endpoints
+  - name: Tags
+    description: Tag management endpoints
+  - name: Comments
+    description: Comment management endpoints
+  - name: Subscribers
+    description: Email subscriber management endpoints
+  - name: Statistics
+    description: Analytics and statistics endpoints
+  - name: Profile
+    description: Author profile management endpoints
+
+paths:
+  /auth/register:
+    post:
+      tags:
+        - Authentication
+      summary: Register a new user
+      description: Create a new user account
+      operationId: registerUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRegistrationRequest'
+      responses:
+        '201':
+          description: User successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /auth/login:
+    post:
+      tags:
+        - Authentication
+      summary: Authenticate user
+      description: Obtain JWT token for authentication
+      operationId: loginUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Successful authentication
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /articles:
+    get:
+      tags:
+        - Articles
+      summary: Get all published articles
+      description: Retrieve paginated list of published articles
+      operationId: getAllArticles
+      parameters:
+        - name: page
+          in: query
+          description: Page number
+          schema:
+            type: integer
+            default: 0
+        - name: size
+          in: query
+          description: Page size
+          schema:
+            type: integer
+            default: 10
+        - name: categoryId
+          in: query
+          description: Filter by category ID
+          schema:
+            type: integer
+        - name: tag
+          in: query
+          description: Filter by tag
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArticlePageResponse'
+
+    post:
+      tags:
+        - Articles
+      summary: Create a new article
+      description: Create a new blog article (admin only)
+      operationId: createArticle
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ArticleRequest'
+      responses:
+        '201':
+          description: Article created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArticleResponse'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden - Admin access required
+
+  /articles/{slug}:
+    get:
+      tags:
+        - Articles
+      summary: Get article by slug
+      description: Retrieve article details by its unique slug
+      operationId: getArticleBySlug
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArticleResponse'
+        '404':
+          description: Article not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    put:
+      tags:
+        - Articles
+      summary: Update an article
+      description: Update an existing article (admin only)
+      operationId: updateArticle
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ArticleRequest'
+      responses:
+        '200':
+          description: Article updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArticleResponse'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden - Admin access required
+        '404':
+          description: Article not found
+
+    delete:
+      tags:
+        - Articles
+      summary: Delete an article
+      description: Delete an article by its slug (admin only)
+      operationId: deleteArticle
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Article deleted successfully
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden - Admin access required
+        '404':
+          description: Article not found
+
+  /articles/{articleId}/publish:
+    post:
+      tags:
+        - Articles
+      summary: Publish an article
+      description: Change an article status from draft to published (admin only)
+      operationId: publishArticle
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: articleId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Article published successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArticleResponse'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden - Admin access required
+        '404':
+          description: Article not found
+
+  /articles/admin:
+    get:
+      tags:
+        - Articles
+      summary: Get all articles (including drafts)
+      description: Retrieve all articles including drafts (admin only)
+      operationId: getAllArticlesForAdmin
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          description: Page number
+          schema:
+            type: integer
+            default: 0
+        - name: size
+          in: query
+          description: Page size
+          schema:
+            type: integer
+            default: 10
+        - name: status
+          in: query
+          description: Filter by status
+          schema:
+            type: string
+            enum: [draft, published]
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArticlePageResponse'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden - Admin access required
+
+  /categories:
+    get:
+      tags:
+        - Categories
+      summary: Get all categories
+      description: Retrieve all blog categories
+      operationId: getAllCategories
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CategoryResponse'
+
+    post:
+      tags:
+        - Categories
+      summary: Create a new category
+      description: Create a new blog category (admin only)
+      operationId: createCategory
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategoryRequest'
+      responses:
+        '201':
+          description: Category created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategoryResponse'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden - Admin access required
+
+  /categories/{id}:
+    put:
+      tags:
+        - Categories
+      summary: Update a category
+      description: Update an existing category (admin only)
+      operationId: updateCategory
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategoryRequest'
+      responses:
+        '200':
+          description: Category updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategoryResponse'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden - Admin access required
+        '404':
+          description: Category not found
+
+    delete:
+      tags:
+        - Categories
+      summary: Delete a category
+      description: Delete a category (admin only)
+      operationId: deleteCategory
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Category deleted successfully
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden - Admin access required
+        '404':
+          description: Category not found
+
+  /tags:
+    get:
+      tags:
+        - Tags
+      summary: Get all tags
+      description: Retrieve all blog tags
+      operationId: getAllTags
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TagResponse'
+
+    post:
+      tags:
+        - Tags
+      summary: Create a new tag
+      description: Create a new blog tag (admin only)
+      operationId: createTag
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TagRequest'
+      responses:
+        '201':
+          description: Tag created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TagResponse'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden - Admin access required
+
+  /tags/{id}:
+    delete:
+      tags:
+        - Tags
+      summary: Delete a tag
+      description: Delete a tag (admin only)
+      operationId: deleteTag
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Tag deleted successfully
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden - Admin access required
+        '404':
+          description: Tag not found
+
+  /articles/{articleId}/comments:
+    get:
+      tags:
+        - Comments
+      summary: Get all comments for an article
+      description: Retrieve all comments for a specific article
+      operationId: getCommentsByArticle
+      parameters:
+        - name: articleId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CommentResponse'
+        '404':
+          description: Article not found
+
+    post:
+      tags:
+        - Comments
+      summary: Add a comment to an article
+      description: Create a new comment on an article
+      operationId: createComment
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: articleId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CommentRequest'
+      responses:
+        '201':
+          description: Comment created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommentResponse'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Article not found
+
+  /comments/{id}:
+    delete:
+      tags:
+        - Comments
+      summary: Delete a comment
+      description: Delete a comment (comment owner or admin only)
+      operationId: deleteComment
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Comment deleted successfully
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden - Must be comment owner or admin
+        '404':
+          description: Comment not found
+
+  /comments/{id}/approve:
+    post:
+      tags:
+        - Comments
+      summary: Approve a comment
+      description: Approve a comment for public visibility (admin only)
+      operationId: approveComment
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Comment approved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommentResponse'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden - Admin access required
+        '404':
+          description: Comment not found
+
+  /subscribers:
+    post:
+      tags:
+        - Subscribers
+      summary: Subscribe to the blog
+      description: Add a new email subscriber
+      operationId: addSubscriber
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubscriberRequest'
+      responses:
+        '201':
+          description: Subscription successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriberResponse'
+        '400':
+          description: Invalid input
+
+  /subscribers/confirm:
+    get:
+      tags:
+        - Subscribers
+      summary: Confirm subscription
+      description: Confirm email subscription via token
+      operationId: confirmSubscription
+      parameters:
+        - name: token
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Subscription confirmed successfully
+        '400':
+          description: Invalid or expired token
+
+  /subscribers/admin:
+    get:
+      tags:
+        - Subscribers
+      summary: Get all subscribers
+      description: Retrieve all newsletter subscribers (admin only)
+      operationId: getAllSubscribers
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SubscriberResponse'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden - Admin access required
+
+  /subscribers/{id}:
+    delete:
+      tags:
+        - Subscribers
+      summary: Delete a subscriber
+      description: Remove a subscriber (admin only)
+      operationId: deleteSubscriber
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Subscriber deleted successfully
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden - Admin access required
+        '404':
+          description: Subscriber not found
+
+  /subscribers/unsubscribe:
+    get:
+      tags:
+        - Subscribers
+      summary: Unsubscribe from the blog
+      description: Unsubscribe using email and token
+      operationId: unsubscribe
+      parameters:
+        - name: email
+          in: query
+          required: true
+          schema:
+            type: string
+            format: email
+        - name: token
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Unsubscribed successfully
+        '400':
+          description: Invalid request
+
+  /statistics/articles:
+    get:
+      tags:
+        - Statistics
+      summary: Get article statistics
+      description: Retrieve view statistics for all articles (admin only)
+      operationId: getArticleStatistics
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: startDate
+          in: query
+          schema:
+            type: string
+            format: date
+        - name: endDate
+          in: query
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ArticleStatResponse'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden - Admin access required
+
+  /statistics/articles/{articleId}:
+    get:
+      tags:
+        - Statistics
+      summary: Get statistics for a specific article
+      description: Retrieve view statistics for a specific article (admin only)
+      operationId: getArticleStatisticsById
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: articleId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: startDate
+          in: query
+          schema:
+            type: string
+            format: date
+        - name: endDate
+          in: query
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ArticleStatResponse'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden - Admin access required
+        '404':
+          description: Article not found
+
+  /statistics/record-view/{articleId}:
+    post:
+      tags:
+        - Statistics
+      summary: Record an article view
+      description: Record that an article has been viewed
+      operationId: recordArticleView
+      parameters:
+        - name: articleId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: View recorded successfully
+        '404':
+          description: Article not found
+
+  /profile:
+    get:
+      tags:
+        - Profile
+      summary: Get author profile
+      description: Retrieve the blog author's public profile
+      operationId: getAuthorProfile
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+
+    put:
+      tags:
+        - Profile
+      summary: Update author profile
+      description: Update the blog author's profile information (admin only)
+      operationId: updateAuthorProfile
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProfileUpdateRequest'
+      responses:
+        '200':
+          description: Profile updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden - Admin access required
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    UserRegistrationRequest:
+      type: object
+      required:
+        - username
+        - email
+        - password
+      properties:
+        username:
+          type: string
+          example: nvbinhsoft
+        email:
+          type: string
+          format: email
+          example: nvbinhsoft@example.com
+        password:
+          type: string
+          format: password
+          example: securePassword123
+        displayName:
+          type: string
+          example: Nguyen Van Binh
+
+    LoginRequest:
+      type: object
+      required:
+        - username
+        - password
+      properties:
+        username:
+          type: string
+          example: nvbinhsoft
+        password:
+          type: string
+          format: password
+          example: securePassword123
+
+    AuthResponse:
+      type: object
+      properties:
+        accessToken:
+          type: string
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+        tokenType:
+          type: string
+          example: Bearer
+        expiresIn:
+          type: integer
+          example: 3600
+        user:
+          $ref: '#/components/schemas/UserResponse'
+
+    UserResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        username:
+          type: string
+          example: nvbinhsoft
+        email:
+          type: string
+          format: email
+          example: nvbinhsoft@example.com
+        displayName:
+          type: string
+          example: Nguyen Van Binh
+        bio:
+          type: string
+          example: Software developer sharing thoughts on web development and life
+        profileImageUrl:
+          type: string
+          format: uri
+          example: https://blog.nvbinhsoft.com/images/profile.jpg
+        isAdmin:
+          type: boolean
+          example: true
+        createdAt:
+          type: string
+          format: date-time
+          example: 2025-04-29T18:04:59Z
+
+    ProfileUpdateRequest:
+      type: object
+      properties:
+        displayName:
+          type: string
+          example: Nguyen Van Binh
+        bio:
+          type: string
+          example: Software developer sharing thoughts on web development and life
+        profileImageUrl:
+          type: string
+          format: uri
+          example: https://blog.nvbinhsoft.com/images/profile.jpg
+
+    ArticleRequest:
+      type: object
+      required:
+        - title
+        - content
+      properties:
+        title:
+          type: string
+          example: Getting Started with Spring Boot
+        slug:
+          type: string
+          example: getting-started-with-spring-boot
+        content:
+          type: string
+          example: This is the full article content with markdown formatting...
+        excerpt:
+          type: string
+          example: Learn how to build your first Spring Boot application
+        featuredImageUrl:
+          type: string
+          format: uri
+          example: https://blog.nvbinhsoft.com/images/spring-boot.jpg
+        categoryId:
+          type: integer
+          format: int64
+          example: 1
+        tags:
+          type: array
+          items:
+            type: string
+          example: ["Spring", "Java", "Tutorial"]
+        status:
+          type: string
+          enum: [draft, published]
+          example: draft
+
+    ArticleResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        title:
+          type: string
+          example: Getting Started with Spring Boot
+        slug:
+          type: string
+          example: getting-started-with-spring-boot
+        content:
+          type: string
+          example: This is the full article content with markdown formatting...
+        excerpt:
+          type: string
+          example: Learn how to build your first Spring Boot application
+        featuredImageUrl:
+          type: string
+          format: uri
+          example: https://blog.nvbinhsoft.com/images/spring-boot.jpg
+        status:
+          type: string
+          enum: [draft, published]
+          example: published
+        category:
+          $ref: '#/components/schemas/CategoryResponse'
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagResponse'
+        publishedAt:
+          type: string
+          format: date-time
+          example: 2025-04-30T10:00:00Z
+        createdAt:
+          type: string
+          format: date-time
+          example: 2025-04-29T18:30:00Z
+        updatedAt:
+          type: string
+          format: date-time
+          example: 2025-04-30T09:45:00Z
+
+    ArticlePageResponse:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/ArticleResponse'
+        pageable:
+          type: object
+          properties:
+            pageNumber:
+              type: integer
+              example: 0
+            pageSize:
+              type: integer
+              example: 10
+            sort:
+              type: object
+              properties:
+                sorted:
+                  type: boolean
+                  example: true
+        totalElements:
+          type: integer
+          format: int64
+          example: 42
+        totalPages:
+          type: integer
+          example: 5
+        last:
+          type: boolean
+          example: false
+        first:
+          type: boolean
+          example: true
+        empty:
+          type: boolean
+          example: false
+
+    CategoryRequest:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          example: Web Development
+        slug:
+          type: string
+          example: web-development
+        description:
+          type: string
+          example: Articles about frontend and backend web technologies
+
+    CategoryResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: Web Development
+        slug:
+          type: string
+          example: web-development
+        description:
+          type: string
+          example: Articles about frontend and backend web technologies
+
+    TagRequest:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          example: Spring
+        slug:
+          type: string
+          example: spring
+
+    TagResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: Spring
+        slug:
+          type: string
+          example: spring
+
+    CommentRequest:
+      type: object
+      required:
+        - content
+      properties:
+        content:
+          type: string
+          example: Great article! Thanks for sharing.
+        parentCommentId:
+          type: integer
+          format: int64
+          example: null
+
+    CommentResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        content:
+          type: string
+          example: Great article! Thanks for sharing.
+        user:
+          $ref: '#/components/schemas/UserResponse'
+        parentCommentId:
+          type: integer
+          format: int64
+          example: null
+        isApproved:
+          type: boolean
+          example: true
+        createdAt:
+          type: string
+          format: date-time
+          example: 2025-04-30T14:25:00Z
+        replies:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommentResponse'
+
+    SubscriberRequest:
+      type: object
+      required:
+        - email
+      properties:
+        email:
+          type: string
+          format: email
+          example: reader@example.com
+        name:
+          type: string
+          example: John Reader
+
+    SubscriberResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        email:
+          type: string
+          format: email
+          example: reader@example.com
+        name:
+          type: string
+          example: John Reader
+        isConfirmed:
+          type: boolean
+          example: true
+        subscribedAt:
+          type: string
+          format: date-time
+          example: 2025-04-30T09:45:00Z
+
+    ArticleStatResponse:
+      type: object
+      properties:
+        articleId:
+          type: integer
+          format: int64
+          example: 1
+        articleTitle:
+          type: string
+          example: Getting Started with Spring Boot
+        views:
+          type: integer
+          example: 42
+        date:
+          type: string
+          format: date
+          example: 2025-04-30
+
+    ErrorResponse:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+          example: 2025-04-30T15:30:45Z
+        status:
+          type: integer
+          example: 400
+        error:
+          type: string
+          example: Bad Request
+        message:
+          type: string
+          example: Invalid input data
+        path:
+          type: string
+          example: /api/v1/articles
