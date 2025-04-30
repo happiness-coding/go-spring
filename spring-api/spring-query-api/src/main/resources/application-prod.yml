@@ -1,0 +1,40 @@
+server:
+  port: 8081
+
+spring:
+  datasource:
+    url: jdbc:mysql://prod-db-server:3306/query_db_prod
+    username: query_user_prod
+    password: query_password_prod
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: false
+
+  cache:
+    type: simple
+
+  security:
+    user:
+      name: prod_user
+      password: prod_password
+
+  jackson:
+    serialization:
+      indent_output: false
+
+logging:
+  level:
+    root: WARN
+    com.nvbinhsoft.blog.query: INFO
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
