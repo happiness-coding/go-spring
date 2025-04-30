@@ -58,10 +58,10 @@ public class ArticleCommandController {
     }
 
     @DeleteMapping("/{slug}")
-    public ResponseEntity<CommandResponse> deleteArticle(@PathVariable String slug) {
+    public ResponseEntity<Void> deleteArticle(@PathVariable String slug) {
         DeleteArticleCommand command = new DeleteArticleCommand(slug);
         articleCommandHandler.handleDeleteArticle(command);
-        return new ResponseEntity<>(new CommandResponse(true, "Article deleted successfully", null), HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PostMapping("/{articleId}/publish")
