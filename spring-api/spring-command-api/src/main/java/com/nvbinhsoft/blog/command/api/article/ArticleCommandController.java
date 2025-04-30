@@ -42,6 +42,9 @@ public class ArticleCommandController {
 
     @PutMapping("/{slug}")
     public ResponseEntity<CommandResponse> updateArticle(@PathVariable String slug, @RequestBody UpdateArticleRequest request) {
+        if (!slug.equals(request.getSlug())) {
+            return new ResponseEntity<>(new CommandResponse(false, "Slug in path does not match slug in request payload", null), HttpStatus.BAD_REQUEST);
+        }
         UpdateArticleCommand command = new UpdateArticleCommand(
                 request.getId(),
                 request.getTitle(),
