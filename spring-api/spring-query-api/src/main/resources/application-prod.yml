@@ -20,9 +20,10 @@ spring:
     type: simple
 
   security:
-    user:
-      name: prod_user
-      password: prod_password
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8080/realms/blog
 
   jackson:
     serialization:
@@ -38,3 +39,8 @@ management:
     web:
       exposure:
         include: "*"
+
+blog:
+  security:
+    keycloak:
+      client-id: blog-api

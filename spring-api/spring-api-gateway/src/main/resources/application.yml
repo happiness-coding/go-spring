@@ -5,6 +5,12 @@ spring:
   application:
     name: blog-gateway
 
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8080/realms/blog
+
   cloud:
     gateway:
       routes:
@@ -20,6 +26,11 @@ spring:
             - Path=/api/user/**
           filters:
             - StripPrefix=2
+
+blog:
+  security:
+    keycloak:
+      client-id: blog-api
 
 eureka:
   client:
