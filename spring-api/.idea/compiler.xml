@@ -10,8 +10,12 @@
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.30/lombok-1.18.30.jar" />
           <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct-processor/1.5.5.Final/mapstruct-processor-1.5.5.Final.jar" />
           <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct/1.5.5.Final/mapstruct-1.5.5.Final.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.30/lombok-1.18.30.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct-processor/1.5.5.Final/mapstruct-processor-1.5.5.Final.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct/1.5.5.Final/mapstruct-1.5.5.Final.jar" />
         </processorPath>
         <module name="spring-command-api" />
+        <module name="spring-migration" />
         <module name="spring-api-gateway" />
         <module name="spring-domain" />
         <module name="spring-infrastructure" />
@@ -25,6 +29,7 @@
       <module name="spring-command-api" options="-parameters" />
       <module name="spring-domain" options="-parameters" />
       <module name="spring-infrastructure" options="-parameters" />
+      <module name="spring-migration" options="-parameters" />
       <module name="spring-query-api" options="-parameters" />
     </option>
   </component>

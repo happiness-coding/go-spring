@@ -7,22 +7,19 @@ import javax.validation.constraints.NotNull;
 @Embeddable
 public class Email {
 
-    @NotNull
-    @Email
-    private String email;
+  @NotNull @Email private String email;
 
-    public Email() {
-    }
+  public Email() {}
 
-    public Email(String email) {
-        this.email = email;
-    }
+  public Email(String email) {
+    this.email = email;
+  }
 
-    public String getEmail() {
-        return email;
-    }
+  public String getEmail() {
+    return email;
+  }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+  public void setEmail(String email) {
+    this.email = email;
+  }
 }

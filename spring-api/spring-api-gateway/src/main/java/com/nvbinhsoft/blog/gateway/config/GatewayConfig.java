@@ -8,13 +8,12 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class GatewayConfig {
 
-    @Bean
-    public RouteLocator customRouteLocator(RouteLocatorBuilder builder) {
-        return builder.routes()
-                .route("article_route", r -> r.path("/articles/**")
-                        .uri("lb://article-service"))
-                .route("category_route", r -> r.path("/categories/**")
-                        .uri("lb://category-service"))
-                .build();
-    }
+  @Bean
+  public RouteLocator customRouteLocator(RouteLocatorBuilder builder) {
+    return builder
+        .routes()
+        .route("article_route", r -> r.path("/articles/**").uri("lb://article-service"))
+        .route("category_route", r -> r.path("/categories/**").uri("lb://category-service"))
+        .build();
+  }
 }

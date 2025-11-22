@@ -9,20 +9,18 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class QuerySwaggerConfig {
 
-    @Bean
-    public GroupedOpenApi publicApi() {
-        return GroupedOpenApi.builder()
-                .group("query-api")
-                .pathsToMatch("/**")
-                .build();
-    }
+  @Bean
+  public GroupedOpenApi publicApi() {
+    return GroupedOpenApi.builder().group("query-api").pathsToMatch("/**").build();
+  }
 
-    @Bean
-    public OpenAPI customOpenAPI() {
-        return new OpenAPI()
-                .info(new Info()
-                        .title("Query API")
-                        .version("1.0")
-                        .description("API documentation for the query side of the blog platform"));
-    }
+  @Bean
+  public OpenAPI customOpenAPI() {
+    return new OpenAPI()
+        .info(
+            new Info()
+                .title("Query API")
+                .version("1.0")
+                .description("API documentation for the query side of the blog platform"));
+  }
 }

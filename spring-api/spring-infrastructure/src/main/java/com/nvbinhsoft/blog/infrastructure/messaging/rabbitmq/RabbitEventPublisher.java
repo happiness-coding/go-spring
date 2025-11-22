@@ -12,22 +12,22 @@ import org.springframework.stereotype.Service;
 @Service
 public class RabbitEventPublisher {
 
-    private final RabbitTemplate rabbitTemplate;
+  private final RabbitTemplate rabbitTemplate;
 
-    @Autowired
-    public RabbitEventPublisher(RabbitTemplate rabbitTemplate) {
-        this.rabbitTemplate = rabbitTemplate;
-    }
+  @Autowired
+  public RabbitEventPublisher(RabbitTemplate rabbitTemplate) {
+    this.rabbitTemplate = rabbitTemplate;
+  }
 
-    public void publishEvent(DomainEvent event) {
-        if (event instanceof ArticleCreatedEvent) {
-            rabbitTemplate.convertAndSend("blogQueue", event);
-        } else if (event instanceof ArticlePublishedEvent) {
-            rabbitTemplate.convertAndSend("blogQueue", event);
-        } else if (event instanceof ArticleUpdatedEvent) {
-            rabbitTemplate.convertAndSend("blogQueue", event);
-        } else if (event instanceof CommentAddedEvent) {
-            rabbitTemplate.convertAndSend("blogQueue", event);
-        }
+  public void publishEvent(DomainEvent event) {
+    if (event instanceof ArticleCreatedEvent) {
+      rabbitTemplate.convertAndSend("blogQueue", event);
+    } else if (event instanceof ArticlePublishedEvent) {
+      rabbitTemplate.convertAndSend("blogQueue", event);
+    } else if (event instanceof ArticleUpdatedEvent) {
+      rabbitTemplate.convertAndSend("blogQueue", event);
+    } else if (event instanceof CommentAddedEvent) {
+      rabbitTemplate.convertAndSend("blogQueue", event);
     }
+  }
 }

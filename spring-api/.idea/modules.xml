@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/spring-api-gateway/spring-api-gateway.iml" filepath="$PROJECT_DIR$/spring-api-gateway/spring-api-gateway.iml" />
+      <module fileurl="file://$PROJECT_DIR$/spring-domain/spring-domain.iml" filepath="$PROJECT_DIR$/spring-domain/spring-domain.iml" />
+      <module fileurl="file://$PROJECT_DIR$/spring-infrastructure/spring-infrastructure.iml" filepath="$PROJECT_DIR$/spring-infrastructure/spring-infrastructure.iml" />
+    </modules>
+  </component>
+</project>

@@ -11,30 +11,30 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitConfig {
 
-    static final String queueName = "blogQueue";
+  static final String queueName = "blogQueue";
 
-    @Bean
-    Queue queue() {
-        return new Queue(queueName, false);
-    }
+  @Bean
+  Queue queue() {
+    return new Queue(queueName, false);
+  }
 
-    @Bean
-    RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
-        return new RabbitTemplate(connectionFactory);
-    }
+  @Bean
+  RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
+    return new RabbitTemplate(connectionFactory);
+  }
 
-    @Bean
-    SimpleMessageListenerContainer container(ConnectionFactory connectionFactory,
-                                             MessageListenerAdapter listenerAdapter) {
-        SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
-        container.setConnectionFactory(connectionFactory);
-        container.setQueueNames(queueName);
-        container.setMessageListener(listenerAdapter);
-        return container;
-    }
+  @Bean
+  SimpleMessageListenerContainer container(
+      ConnectionFactory connectionFactory, MessageListenerAdapter listenerAdapter) {
+    SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
+    container.setConnectionFactory(connectionFactory);
+    container.setQueueNames(queueName);
+    container.setMessageListener(listenerAdapter);
+    return container;
+  }
 
-    @Bean
-    MessageListenerAdapter listenerAdapter(RabbitMQReceiver receiver) {
-        return new MessageListenerAdapter(receiver, "receiveMessage");
-    }
+  @Bean
+  MessageListenerAdapter listenerAdapter(RabbitMQReceiver receiver) {
+    return new MessageListenerAdapter(receiver, "receiveMessage");
+  }
 }

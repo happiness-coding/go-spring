@@ -5,13 +5,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 public class PasswordHashService {
 
-    private final PasswordEncoder passwordEncoder;
+  private final PasswordEncoder passwordEncoder;
 
-    public PasswordHashService() {
-        this.passwordEncoder = new BCryptPasswordEncoder();
-    }
+  public PasswordHashService() {
+    this.passwordEncoder = new BCryptPasswordEncoder();
+  }
 
-    public String hashPassword(String plainPassword) {
-        return passwordEncoder.encode(plainPassword);
-    }
+  public String hashPassword(String plainPassword) {
+    return passwordEncoder.encode(plainPassword);
+  }
 }

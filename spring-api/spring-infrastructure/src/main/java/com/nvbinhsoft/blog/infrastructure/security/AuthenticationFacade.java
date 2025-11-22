@@ -7,20 +7,20 @@ import org.springframework.stereotype.Component;
 @Component
 public class AuthenticationFacade {
 
-    public Authentication getAuthentication() {
-        return SecurityContextHolder.getContext().getAuthentication();
-    }
+  public Authentication getAuthentication() {
+    return SecurityContextHolder.getContext().getAuthentication();
+  }
 
-    public String getCurrentUsername() {
-        Authentication authentication = getAuthentication();
-        if (authentication != null && authentication.isAuthenticated()) {
-            return authentication.getName();
-        }
-        return null;
+  public String getCurrentUsername() {
+    Authentication authentication = getAuthentication();
+    if (authentication != null && authentication.isAuthenticated()) {
+      return authentication.getName();
     }
+    return null;
+  }
 
-    public boolean isAuthenticated() {
-        Authentication authentication = getAuthentication();
-        return authentication != null && authentication.isAuthenticated();
-    }
+  public boolean isAuthenticated() {
+    Authentication authentication = getAuthentication();
+    return authentication != null && authentication.isAuthenticated();
+  }
 }

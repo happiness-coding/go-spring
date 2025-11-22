@@ -5,22 +5,21 @@ import javax.persistence.*;
 @MappedSuperclass
 public abstract class AggregateRoot {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    public AggregateRoot() {
-    }
+  public AggregateRoot() {}
 
-    public AggregateRoot(Long id) {
-        this.id = id;
-    }
+  public AggregateRoot(Long id) {
+    this.id = id;
+  }
 
-    public Long getId() {
-        return id;
-    }
+  public Long getId() {
+    return id;
+  }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+  public void setId(Long id) {
+    this.id = id;
+  }
 }

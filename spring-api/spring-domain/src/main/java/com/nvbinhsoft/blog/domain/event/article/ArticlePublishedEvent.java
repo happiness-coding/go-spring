@@ -5,18 +5,18 @@ import com.nvbinhsoft.blog.domain.model.article.ArticleId;
 
 public class ArticlePublishedEvent implements DomainEvent {
 
-    private final ArticleId articleId;
+  private final ArticleId articleId;
 
-    public ArticlePublishedEvent(ArticleId articleId) {
-        this.articleId = articleId;
-    }
+  public ArticlePublishedEvent(ArticleId articleId) {
+    this.articleId = articleId;
+  }
 
-    public ArticleId getArticleId() {
-        return articleId;
-    }
+  public ArticleId getArticleId() {
+    return articleId;
+  }
 
-    @Override
-    public String getEventType() {
-        return "ArticlePublishedEvent";
-    }
+  @Override
+  public String getEventType() {
+    return "ArticlePublishedEvent";
+  }
 }

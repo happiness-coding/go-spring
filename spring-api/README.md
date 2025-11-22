@@ -22,6 +22,12 @@ Spring Boot 3.2 multi-module project for nvbinhsoft's blog platform. The codebas
 - Faster packaging when tests are green: `mvn -DskipTests package`
 - Coverage report after `mvn verify`: `target/site/jacoco/index.html`
 
+## Code Style (Spotless)
+- Enforced during the Maven lifecycle via `spotless:check` (runs with `mvn verify`); run `mvn spotless:apply` to auto-fix.
+- Java: Google Java Format 1.17.0 + annotation reflow + unused import removal across modules.
+- POM files: normalized with Spotless `sortPom`.
+- Tip: run Spotless before committing to keep CI green.
+
 ## Run Services (local)
 - Query API (port 8081 by default): `mvn -pl spring-query-api -am spring-boot:run`
 - Gateway (port 8080 by default): `mvn -pl spring-api-gateway -am spring-boot:run`

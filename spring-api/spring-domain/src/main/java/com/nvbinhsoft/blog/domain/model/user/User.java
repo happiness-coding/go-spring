@@ -1,117 +1,123 @@
 package com.nvbinhsoft.blog.domain.model.user;
 
-import javax.persistence.*;
 import java.time.LocalDateTime;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "users")
 public class User {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    @Column(nullable = false, unique = true)
-    private String username;
+  @Column(nullable = false, unique = true)
+  private String username;
 
-    @Column(nullable = false, unique = true)
-    private String email;
+  @Column(nullable = false, unique = true)
+  private String email;
 
-    @Column(nullable = false)
-    private String passwordHash;
+  @Column(nullable = false)
+  private String passwordHash;
 
-    private String displayName;
+  private String displayName;
 
-    @Lob
-    private String bio;
+  @Lob private String bio;
 
-    private String profileImageUrl;
+  private String profileImageUrl;
 
-    @Column(nullable = false)
-    private boolean isAdmin;
+  @Column(nullable = false)
+  private boolean isAdmin;
 
-    @Column(nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+  @Column(nullable = false, updatable = false)
+  private LocalDateTime createdAt;
 
-    public User() {
-    }
+  public User() {}
 
-    public User(String username, String email, String passwordHash, String displayName, String bio, String profileImageUrl, boolean isAdmin, LocalDateTime createdAt) {
-        this.username = username;
-        this.email = email;
-        this.passwordHash = passwordHash;
-        this.displayName = displayName;
-        this.bio = bio;
-        this.profileImageUrl = profileImageUrl;
-        this.isAdmin = isAdmin;
-        this.createdAt = createdAt;
-    }
+  public User(
+      String username,
+      String email,
+      String passwordHash,
+      String displayName,
+      String bio,
+      String profileImageUrl,
+      boolean isAdmin,
+      LocalDateTime createdAt) {
+    this.username = username;
+    this.email = email;
+    this.passwordHash = passwordHash;
+    this.displayName = displayName;
+    this.bio = bio;
+    this.profileImageUrl = profileImageUrl;
+    this.isAdmin = isAdmin;
+    this.createdAt = createdAt;
+  }
 
-    public Long getId() {
-        return id;
-    }
+  public Long getId() {
+    return id;
+  }
 
-    public String getUsername() {
-        return username;
-    }
+  public String getUsername() {
+    return username;
+  }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+  public void setUsername(String username) {
+    this.username = username;
+  }
 
-    public String getEmail() {
-        return email;
-    }
+  public String getEmail() {
+    return email;
+  }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+  public void setEmail(String email) {
+    this.email = email;
+  }
 
-    public String getPasswordHash() {
-        return passwordHash;
-    }
+  public String getPasswordHash() {
+    return passwordHash;
+  }
 
-    public void setPasswordHash(String passwordHash) {
-        this.passwordHash = passwordHash;
-    }
+  public void setPasswordHash(String passwordHash) {
+    this.passwordHash = passwordHash;
+  }
 
-    public String getDisplayName() {
-        return displayName;
-    }
+  public String getDisplayName() {
+    return displayName;
+  }
 
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
-    }
+  public void setDisplayName(String displayName) {
+    this.displayName = displayName;
+  }
 
-    public String getBio() {
-        return bio;
-    }
+  public String getBio() {
+    return bio;
+  }
 
-    public void setBio(String bio) {
-        this.bio = bio;
-    }
+  public void setBio(String bio) {
+    this.bio = bio;
+  }
 
-    public String getProfileImageUrl() {
-        return profileImageUrl;
-    }
+  public String getProfileImageUrl() {
+    return profileImageUrl;
+  }
 
-    public void setProfileImageUrl(String profileImageUrl) {
-        this.profileImageUrl = profileImageUrl;
-    }
+  public void setProfileImageUrl(String profileImageUrl) {
+    this.profileImageUrl = profileImageUrl;
+  }
 
-    public boolean isAdmin() {
-        return isAdmin;
-    }
+  public boolean isAdmin() {
+    return isAdmin;
+  }
 
-    public void setAdmin(boolean admin) {
-        isAdmin = admin;
-    }
+  public void setAdmin(boolean admin) {
+    isAdmin = admin;
+  }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
+  public LocalDateTime getCreatedAt() {
+    return createdAt;
+  }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
+  public void setCreatedAt(LocalDateTime createdAt) {
+    this.createdAt = createdAt;
+  }
 }

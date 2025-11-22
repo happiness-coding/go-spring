@@ -11,15 +11,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/users")
 public class UserQueryController {
 
-    private final UserQueryHandler userQueryHandler;
+  private final UserQueryHandler userQueryHandler;
 
-    @Autowired
-    public UserQueryController(UserQueryHandler userQueryHandler) {
-        this.userQueryHandler = userQueryHandler;
-    }
+  @Autowired
+  public UserQueryController(UserQueryHandler userQueryHandler) {
+    this.userQueryHandler = userQueryHandler;
+  }
 
-    @GetMapping("/profile")
-    public UserProfileView getUserProfile() {
-        return userQueryHandler.handleGetUserProfile();
-    }
+  @GetMapping("/profile")
+  public UserProfileView getUserProfile() {
+    return userQueryHandler.handleGetUserProfile();
+  }
 }

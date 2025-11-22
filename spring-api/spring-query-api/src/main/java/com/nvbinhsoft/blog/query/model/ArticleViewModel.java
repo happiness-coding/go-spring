@@ -4,67 +4,73 @@ import java.time.LocalDateTime;
 
 public class ArticleViewModel {
 
-    private Long id;
-    private String title;
-    private String slug;
-    private String excerpt;
-    private String featuredImageUrl;
-    private LocalDateTime publishedAt;
+  private Long id;
+  private String title;
+  private String slug;
+  private String excerpt;
+  private String featuredImageUrl;
+  private LocalDateTime publishedAt;
 
-    public ArticleViewModel(Long id, String title, String slug, String excerpt, String featuredImageUrl, LocalDateTime publishedAt) {
-        this.id = id;
-        this.title = title;
-        this.slug = slug;
-        this.excerpt = excerpt;
-        this.featuredImageUrl = featuredImageUrl;
-        this.publishedAt = publishedAt;
-    }
+  public ArticleViewModel(
+      Long id,
+      String title,
+      String slug,
+      String excerpt,
+      String featuredImageUrl,
+      LocalDateTime publishedAt) {
+    this.id = id;
+    this.title = title;
+    this.slug = slug;
+    this.excerpt = excerpt;
+    this.featuredImageUrl = featuredImageUrl;
+    this.publishedAt = publishedAt;
+  }
 
-    public Long getId() {
-        return id;
-    }
+  public Long getId() {
+    return id;
+  }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-    public String getTitle() {
-        return title;
-    }
+  public String getTitle() {
+    return title;
+  }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+  public void setTitle(String title) {
+    this.title = title;
+  }
 
-    public String getSlug() {
-        return slug;
-    }
+  public String getSlug() {
+    return slug;
+  }
 
-    public void setSlug(String slug) {
-        this.slug = slug;
-    }
+  public void setSlug(String slug) {
+    this.slug = slug;
+  }
 
-    public String getExcerpt() {
-        return excerpt;
-    }
+  public String getExcerpt() {
+    return excerpt;
+  }
 
-    public void setExcerpt(String excerpt) {
-        this.excerpt = excerpt;
-    }
+  public void setExcerpt(String excerpt) {
+    this.excerpt = excerpt;
+  }
 
-    public String getFeaturedImageUrl() {
-        return featuredImageUrl;
-    }
+  public String getFeaturedImageUrl() {
+    return featuredImageUrl;
+  }
 
-    public void setFeaturedImageUrl(String featuredImageUrl) {
-        this.featuredImageUrl = featuredImageUrl;
-    }
+  public void setFeaturedImageUrl(String featuredImageUrl) {
+    this.featuredImageUrl = featuredImageUrl;
+  }
 
-    public LocalDateTime getPublishedAt() {
-        return publishedAt;
-    }
+  public LocalDateTime getPublishedAt() {
+    return publishedAt;
+  }
 
-    public void setPublishedAt(LocalDateTime publishedAt) {
-        this.publishedAt = publishedAt;
-    }
+  public void setPublishedAt(LocalDateTime publishedAt) {
+    this.publishedAt = publishedAt;
+  }
 }

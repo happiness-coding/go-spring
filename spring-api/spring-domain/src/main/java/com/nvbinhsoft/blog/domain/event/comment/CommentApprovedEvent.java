@@ -5,18 +5,18 @@ import com.nvbinhsoft.blog.domain.model.comment.CommentId;
 
 public class CommentApprovedEvent implements DomainEvent {
 
-    private final CommentId commentId;
+  private final CommentId commentId;
 
-    public CommentApprovedEvent(CommentId commentId) {
-        this.commentId = commentId;
-    }
+  public CommentApprovedEvent(CommentId commentId) {
+    this.commentId = commentId;
+  }
 
-    public CommentId getCommentId() {
-        return commentId;
-    }
+  public CommentId getCommentId() {
+    return commentId;
+  }
 
-    @Override
-    public String getEventType() {
-        return "COMMENT_APPROVED";
-    }
+  @Override
+  public String getEventType() {
+    return "COMMENT_APPROVED";
+  }
 }
